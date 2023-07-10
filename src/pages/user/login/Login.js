@@ -1,6 +1,7 @@
 import s from "./LoginSC";
 import React, { useState } from 'react';
-import axios from 'axios';
+import userApi from '../UserApi';
+
 
 const Login = () => {
     const [username, setUsername] = useState(null);
@@ -15,20 +16,8 @@ const Login = () => {
     }
 
     const searchUser = async() => {
-        const res = await axios.create ({
-            headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:8080'
-            },
-            withCredentials: true
-        })
-        .post('http://localhost:8080/api/user/login', {username: username, password: password})
-        .then(res => {
-            console.log(res);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-        
+        const res = await userApi.login({username: username, password: password});
+        console.log(res);
     }
 
     return (
