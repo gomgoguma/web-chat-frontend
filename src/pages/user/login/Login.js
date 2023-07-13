@@ -1,9 +1,12 @@
 import s from "./LoginSC";
 import React, { useState } from 'react';
 import userApi from '../UserApi';
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
 
@@ -17,7 +20,13 @@ const Login = () => {
 
     const searchUser = async() => {
         const res = await userApi.login({username: username, password: password});
-        console.log(res);
+        if(res?.status === 200) {
+            alert(res.data);
+            navigate('/');
+        }
+        else {
+            alert('로그인 실패');
+        }
     }
 
     return (
