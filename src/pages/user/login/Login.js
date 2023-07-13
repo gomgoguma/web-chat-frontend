@@ -25,7 +25,7 @@ const Login = () => {
             navigate('/');
         }
         else {
-            alert('로그인 실패');
+            alert(res.response.data);
         }
     }
 
