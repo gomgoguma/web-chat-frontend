@@ -1,6 +1,6 @@
 import s from "./LoginSC";
 import React, { useState } from 'react';
-import userApi from '../UserApi';
+import userApi from '../../../api/UserApi';
 import { useNavigate } from "react-router-dom";
 
 

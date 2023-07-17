@@ -1,5 +1,7 @@
-import userApi from '../user/UserApi';
+import userApi from '../../api/UserApi';
 import { useEffect } from 'react';
+import useAuth from '../../hooks/useAuth';
+
 
 const getUsers = async() => {
     const res = await userApi.getUsers();
@@ -7,6 +9,8 @@ const getUsers = async() => {
 }
 
 const Main = () => {
+    const userInfo = useAuth();
+
     useEffect(() => {
         getUsers();
     }, []);

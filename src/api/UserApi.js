@@ -22,6 +22,14 @@ const UserApi = {
       return err;
     }
   },
+  check: async (dto) => {
+    try {
+      const res = await api.post('/check');
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
 };
 
 export default UserApi;
