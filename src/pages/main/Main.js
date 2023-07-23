@@ -1,24 +1,29 @@
-import userApi from '../../api/UserApi';
+import s from './MainSC';
+import roomApi from '../../api/RoomApi';
 import { useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-
-
-const getUsers = async() => {
-    const res = await userApi.getUsers();
-    console.log(res);
-}
+import SideMenu from '../../common/SideMenu/SideMenu';
+import Header from '../../common/Header/Header';
 
 const Main = () => {
     const userInfo = useAuth();
 
-    useEffect(() => {
-        getUsers();
-    }, []);
+    const createRoom = async() => {
+        const res = await roomApi.createRoom();
+        console.log(res);
+    }
 
     return (
-        <div>
-            1234
-        </div>
+        <>
+            <Header />
+            <s.Container>
+                <SideMenu />
+                <s.Content>
+                    <button onClick={createRoom}> 채팅방 만들기 </button>
+                </s.Content>
+            </s.Container>
+            
+        </>
     );
 }
 
