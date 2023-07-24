@@ -12,7 +12,7 @@ const SideMenu = () => {
     console.log(res);
   }
   
-  const getMessage = async => {
+  const getMessage = async() => {
     alert(`메시지 가져오기`);
     //to-do
     //mongo db 조회
