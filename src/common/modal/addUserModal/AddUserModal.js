@@ -27,7 +27,7 @@ const AddUserModal = ({ closeModal, getRooms }) => {
 
   const rowClicked = (id) => {
     setSelectedRow(
-      selectedRow.includes(id) ? selectedRow.filter(el => el != id) : [...selectedRow, id]
+      selectedRow.includes(id) ? selectedRow.filter(el => el !== id) : [...selectedRow, id]
     );
   }
 

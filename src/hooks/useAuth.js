@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userApi from "../api/UserApi";
+import { userAtom } from "../states/atom";
+import { useAtom } from "jotai";
 
 const useAuth = () => {
-    const [userInfo, setUserInfo] = useState();
+    const [, setUserInfo] = useAtom(userAtom);
     const navigate = useNavigate();
 
     const check = async() => {
@@ -25,8 +27,6 @@ const useAuth = () => {
     useEffect(()=>{ 
         check();
     },[])
-
-    return { userInfo };
 }
 
 export default useAuth;

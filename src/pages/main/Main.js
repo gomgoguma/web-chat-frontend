@@ -1,12 +1,10 @@
 import s from './MainSC';
-import { useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
-import ChatRoom from '../../common/chatRoom/ChatRoom';
+import { useState } from 'react';
 import Header from '../../common/header/Header';
-import ChatContent from '../../common/chatContent/ChatContent';
+import ChatRoom from './chat-room/ChatRoom';
+import ChatContent from './chat-content/ChatContent';
 
 const Main = () => {
-    const userInfo = useAuth();
     const [selectedRoomId, setSelectedRoomId] = useState(0);
 
     return (

@@ -1,6 +1,6 @@
 import s from './ChatRoomSC';
-import RoomApi from '../../api/RoomApi';
-import AddUserModal from '../modal/addUserModal/AddUserModal';
+import RoomApi from '../../../api/RoomApi';
+import AddUserModal from '../../../common/modal/addUserModal/AddUserModal';
 import { useEffect, useState } from 'react';
 
 const ChatRoom = ({setSelectedRoomId, selectedRoomId}) => {
