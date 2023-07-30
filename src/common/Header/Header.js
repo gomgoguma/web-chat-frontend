@@ -1,8 +1,11 @@
+import s from './HeaderSC'
+
 const Header = () => {
     return (
         <>
-            <div>
-            </div>
+            <s.Container>
+                WebChat
+            </s.Container>
         </>
     );
 }

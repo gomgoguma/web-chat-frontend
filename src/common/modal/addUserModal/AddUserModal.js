@@ -1,16 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './AddUserModalSC'
+import UserApi from '../../../api/UserApi'
+import RoomApi from '../../../api/RoomApi';
 
-const AddUserModal = ({ closeModal }) => {
+const AddUserModal = ({ closeModal, getRooms }) => {
+
   const [selectedRow, setSelectedRow] = useState([]);
+  const [userList, setUserList] = useState([]);
+
+  const getUser = async() => {
+    const res = await UserApi.getUsers({excludeOwnYn: 'Y'});
+    if(res.status === 200) {
+      setUserList(res.data);
+    }
+  }
+
+  useEffect(()=>{ 
+      getUser();
+  },[]);
 
   const handleContainerClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
     } 
   };
-
-  const list = [{id:1, name: '고구마'},{id:2, name: '감자'},{id:3, name: '버섯'},{id:4, name: '고구마'},{id:5, name: '감자'},{id:6, name: '버섯'},{id:7, name: '고구마'},{id:8, name: '감자'},{id:9, name: '버섯'}];
 
   const rowClicked = (id) => {
     setSelectedRow(
@@ -22,7 +35,12 @@ const AddUserModal = ({ closeModal }) => {
     if(selectedRow.length <= 0)
       alert('대화할 사용자를 선택해주세요');
     else {
-      alert(selectedRow);
+      const res = await RoomApi.createRoom({userIdList: selectedRow});
+      if(res.status === 200) {
+        alert('대화 시작');
+        closeModal();
+        getRooms();
+      }
     }
   }
 
@@ -34,8 +52,8 @@ const AddUserModal = ({ closeModal }) => {
           <s.InputName />
         </s.SearchBar>
         <s.UserBox>
-          {list.map(el => 
-            <s.UserRow key={el.id} isSelected={selectedRow.includes(el.id)} onClick={() => rowClicked(el.id)}>
+          {userList.map(el => 
+            <s.UserRow key={el.id} selected={selectedRow.includes(el.id)} onClick={() => rowClicked(el.id)}>
               {el.name}
             </s.UserRow>
           )}

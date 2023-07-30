@@ -14,9 +14,9 @@ const UserApi = {
       return err;
     }
   },
-  getUsers: async () => {
+  getUsers: async (dto) => {
     try {
-      const res = await api.get('');
+      const res = await api.get('', {params: dto});
       return res;
     } catch (err) {
       return err;

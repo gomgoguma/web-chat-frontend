@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const AddUserModalSC = {
   ModalContainer: styled.div`
-    width: 100%;
+    width: 100vw;
     min-width: 1200px;
     position: fixed;
     top: 0;
@@ -32,7 +32,7 @@ const AddUserModalSC = {
   `,
   SearchBar: styled.div`
     position: absolute;
-    width: 100%;
+    width: 95%;
     top: 10px;
     left: 10px;
   `,
@@ -44,7 +44,7 @@ const AddUserModalSC = {
     margin-top: 60px;
     width: 100%;
     height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
   `,
   UserRow: styled.div`
     display: flex;
@@ -52,9 +52,11 @@ const AddUserModalSC = {
     height: 40px;
     padding-left: 10px;
     &:hover {
-      background-color: ${(props) => (props.isSelected ? '#ccc' : '#ddd')};
+      background-color: ${(props) => (props.selected ? '#566270' : '#a4afbc')};
+      color:white;
     }
-    background-color: ${(props) => (props.isSelected ? '#ccc' : 'transparent')};
+    background-color: ${(props) => (props.selected ? '#566270' : 'transparent')};
+    color: ${(props) => (props.selected ? 'white' : 'black')};
     cursor: pointer;
   `
   

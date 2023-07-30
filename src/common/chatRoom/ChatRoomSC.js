@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 
-const SideMenuSC = {
+const ChatRoomSC = {
   Container: styled.div`
-      width: 300px;
-      height: 100vh;
+      min-width: 300px;
       border-right:1px solid black;
+      height: calc(100vh - 52px);
+  `,
+  RoomList: styled.div`
+    overflow-y: auto;
+    height: calc(100vh - 82px);
   `,
   RoomBox: styled.div`
     display: flex;
@@ -12,8 +16,10 @@ const SideMenuSC = {
     justify-content: center;
     width: 100%;
     height: 70px;
-    border-top: 1px solid black;
     border-bottom: 1px solid black;
+    cursor: pointer;
+    background-color: ${(props) => (props.selected ? '#566270' : 'transparent')};
+    color: ${(props) => (props.selected ? 'white' : 'black')};
   `,
   RoomName: styled.div`
     font-size: 16px;
@@ -27,4 +33,4 @@ const SideMenuSC = {
   `
 }
 
-export default SideMenuSC;
+export default ChatRoomSC;
