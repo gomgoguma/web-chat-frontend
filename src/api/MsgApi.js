@@ -6,9 +6,9 @@ const api = axios.create({
 });
 
 const MsgApi = {
-  getMsgs: async(roomId) => {
+  getMsgs: async(dto) => {
     try {
-      const res = await api.get('', { params: { roomId } });
+      const res = await api.get('', { params: dto });
       return res;
     } catch (err) {
       return err;

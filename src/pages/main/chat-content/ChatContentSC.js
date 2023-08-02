@@ -28,14 +28,14 @@ import styled from 'styled-components';
 
     export const MsgBox = styled.div`
         width: 100%;
-        min-width: 1200px;
+        min-width: 800px;
         display: flex;
         justify-content: ${(props) => (props.myChat ? 'end': 'left')};
         margin: 10px 0;
     `;
 
     export const MsgContent = styled.div`
-        max-width: 30vw;
+        max-width: 400px;
         display: flex;
         flex-direction: column;
     `;
@@ -45,7 +45,8 @@ import styled from 'styled-components';
     `;
 
     export const MsgText = styled.div`
-        background-color: ${(props) => (props.myChat ? '#A593E0': '#E0E3DA')};
+        //background-color: ${(props) => (props.myChat ? '#609966': '#EDF1D6')};
+        border: 1px solid black;
         border-radius: 10px;
         padding: 10px;
     `;

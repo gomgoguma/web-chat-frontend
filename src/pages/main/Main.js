@@ -5,15 +5,15 @@ import ChatRoom from './chat-room/ChatRoom';
 import ChatContent from './chat-content/ChatContent';
 
 const Main = () => {
-    const [selectedRoomId, setSelectedRoomId] = useState(0);
+    const [selectedRoom, setSelectedRoom] = useState();
 
     return (
     <>
         <s.Container>            
             <Header />
             <s.Content>
-                <ChatRoom setSelectedRoomId={setSelectedRoomId} selectedRoomId={selectedRoomId} />
-                <ChatContent selectedRoomId={selectedRoomId} />
+                <ChatRoom setSelectedRoom={setSelectedRoom} selectedRoom={selectedRoom} />
+                <ChatContent selectedRoom={selectedRoom} />
             </s.Content>
         </s.Container>
     </>

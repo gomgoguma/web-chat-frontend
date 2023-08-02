@@ -20,12 +20,16 @@ const Login = () => {
 
     const searchUser = async() => {
         const res = await userApi.login({username: username, password: password});
-        if(res?.status === 200) {
-            alert(res.data);
-            navigate('/');
+        if(res.status === 200) {
+            if(res.data.resCd === 200) {
+                navigate('/');
+            }
+            else {
+                alert(res.data.resMsg);
+            }
         }
         else {
-            alert(res.response.data);
+            alert('오류가 발생했습니다.');
         }
     }
 

@@ -8,15 +8,21 @@ const AddUserModal = ({ closeModal, getRooms }) => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [userList, setUserList] = useState([]);
 
-  const getUser = async() => {
+  const getUsers = async() => {
     const res = await UserApi.getUsers({excludeOwnYn: 'Y'});
     if(res.status === 200) {
-      setUserList(res.data);
+      if(res.data.resCd === 200) {
+        setUserList(res.data.data);
+        console.log(res.data.data);
+      }
+    }
+    else {
+      alert('오류가 발생했습니다.');
     }
   }
 
   useEffect(()=>{ 
-      getUser();
+      getUsers();
   },[]);
 
   const handleContainerClick = (e) => {

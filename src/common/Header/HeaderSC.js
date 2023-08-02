@@ -6,8 +6,6 @@ const HeaderSC = {
         display: flex;
         align-items: center;
         height: 50px;
-        background-color: #566270;
-        color: white;
     `,
   }
   

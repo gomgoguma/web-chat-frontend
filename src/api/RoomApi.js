@@ -8,7 +8,7 @@ const api = axios.create({
 const RoomApi = {
   createRoom: async (dto) => {
     try {
-      const res = await api.post('', { userIdList : [3] });
+      const res = await api.post('', dto);
       return res;
     } catch (err) {
       return err;
