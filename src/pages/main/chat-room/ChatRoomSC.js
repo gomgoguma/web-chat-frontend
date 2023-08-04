@@ -27,6 +27,7 @@ const ChatRoomSC = {
     margin-bottom: 10px;
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
   `,
   RecentMessage: styled.div`
     font-size: 14px;
