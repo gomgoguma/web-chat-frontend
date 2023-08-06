@@ -28,6 +28,7 @@ const useAuth = () => {
             
         }
         else {
+            navigate("/login");
             alert('오류가 발생했습니다.');
         }
     } 
