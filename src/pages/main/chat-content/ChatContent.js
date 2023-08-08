@@ -19,6 +19,9 @@ const ChatContent = ({ selectedRoom }) => {
 
   const getMsgs = useCallback(async () => {
     if (selectedRoom?.id) {
+      if(pageNum === 0 && !isInitial) {
+        return;
+      }
       const res = await MsgApi.getMsgs({ roomId: selectedRoom?.id, pageNum: pageNum });
       if (res.status === 200) {
         if (res.data.resCd === 200) {
@@ -34,36 +37,35 @@ const ChatContent = ({ selectedRoom }) => {
         alert('오류가 발생했습니다.');
       }
     }
-  }, [pageNum]);
+  }, [pageNum, isInitial]);
 
   useEffect(() => {
-    console.log(pageNum, selectedRoom?.id);
     getMsgs();
   }, [getMsgs]);
 
   const getExtraMsg = useCallback(() => {
-    if (msgRef.current) {
-      const { scrollTop } = msgRef.current;
-      console.log(scrollTop, isInitial);
-      if (scrollTop === 0 && !isInitial) {
-        console.log('스크롤 top');
+    const { scrollTop } = msgRef.current;
+    if (scrollTop === 0 && !isInitial) {
+      if (selectedRoom?.id) {
         setPageNum((prev) => prev + 1);
       }
     }
-  }, [isInitial]);
+  }, [isInitial, selectedRoom?.id]);
+
+  useEffect(() => {
+    if (msgRef.current) {
+      msgRef.current.addEventListener('scroll', getExtraMsg, true);
+      return () => {
+        msgRef.current.removeEventListener('scroll', getExtraMsg, true);
+      };
+    }
+  }, [getExtraMsg]);
 
   useEffect(() => {
     if (selectedRoom?.id) {
       setMsgList([]);
       setIsInitial(true);
-      setTimeout(() => {
-        setPageNum(0);  
-      }, 1000);
-      
-      msgRef.current.addEventListener('scroll', getExtraMsg, true);
-      return () => {
-          msgRef.current.removeEventListener('scroll', getExtraMsg, true);
-      };
+      setPageNum(0);
     }
   }, [selectedRoom?.id]);
 
@@ -72,7 +74,6 @@ const ChatContent = ({ selectedRoom }) => {
       const { scrollTop, scrollHeight, clientHeight } = msgRef.current;
       const lastMsgHeight = lastMsgRef?.current?.offsetHeight;
       if(msgList.length > 0 && isInitial) {
-        console.log(msgList.length, isInitial);
         setIsInitial(false);
         msgRef.current.scrollTop = msgRef.current.scrollHeight;
       } else if ( scrollTop + clientHeight >= scrollHeight - lastMsgHeight - 11) {
@@ -137,8 +138,6 @@ const ChatContent = ({ selectedRoom }) => {
                     <SockJsClient
                         url={"http://localhost:8080/my-chat/"}
                         topics={[`/topic/group/${selectedRoom.id}`]}
-                        // onConnect={console.log("connected!")}
-                        // onDisconnect={console.log("disconnected!")}
                         onMessage={(msg) => handleOnMessage(msg)}
                         debug={false}
                     />
