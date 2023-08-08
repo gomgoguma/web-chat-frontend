@@ -1,19 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import s from './AddUserModalSC'
 import UserApi from '../../../api/UserApi'
 import RoomApi from '../../../api/RoomApi';
+import { debounce } from 'lodash';
 
 const AddUserModal = ({ closeModal, getRooms }) => {
 
   const [selectedRow, setSelectedRow] = useState([]);
   const [userList, setUserList] = useState([]);
+  const [searchName, setSearchName] = useState();
 
-  const getUsers = async() => {
-    const res = await UserApi.getUsers({excludeOwnYn: 'Y'});
+  const getUsers = async(param) => {
+    const res = await UserApi.getUsers(param);
     if(res.status === 200) {
       if(res.data.resCd === 200) {
         setUserList(res.data.data);
         console.log(res.data.data);
+      }
+      else if(res.data.resCd === 404) {
+        setUserList([]);
       }
     }
     else {
@@ -22,7 +27,7 @@ const AddUserModal = ({ closeModal, getRooms }) => {
   }
 
   useEffect(()=>{ 
-      getUsers();
+      getUsers({excludeOwnYn: 'Y'});
   },[]);
 
   const handleContainerClick = (e) => {
@@ -49,13 +54,27 @@ const AddUserModal = ({ closeModal, getRooms }) => {
       }
     }
   }
+  
+  const delayedSearch = useCallback(debounce((name) => {
+    getUsers({excludeOwnYn: 'Y', name});
+  }, 300), []);
+
+  const onChangeSearchName = (e) => {
+    const inputValue = e.target.value;
+    setSearchName(inputValue);
+  }
+
+  useEffect(() => {
+    delayedSearch(searchName);
+  }, [searchName]);
+
 
   return (
     <s.ModalContainer onClick={handleContainerClick}>
       <s.ModalContent>
         <s.CloseButton onClick={closeModal}>&times;</s.CloseButton>
         <s.SearchBar>
-          <s.InputName />
+          <s.InputName value={searchName} onChange={onChangeSearchName}/>
         </s.SearchBar>
         <s.UserBox>
           {userList.map(el => 
