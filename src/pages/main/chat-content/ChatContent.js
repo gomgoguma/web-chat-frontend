@@ -8,14 +8,14 @@ import ChatApi from '../../../api/ChatApi';
 
 const ChatContent = ({ selectedRoom }) => {
   const [userInfo,] = useAtom(userAtom);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState();
   const [lastMsgCnt, setLastMsgCnt] = useState(0);
   const [msgList, setMsgList] = useState([]);
   const msgRef = useRef(null);
   const prevFirstMsgRef = useRef(null);
   const lastMsgRef = useRef(null);
 
-  const [isInitial, setIsInitial] = useState(true);
+  const [isInitial, setIsInitial] = useState(false);
 
   const getMsgs = useCallback(async () => {
     if (selectedRoom?.id) {
@@ -34,7 +34,7 @@ const ChatContent = ({ selectedRoom }) => {
         alert('오류가 발생했습니다.');
       }
     }
-  }, [pageNum, selectedRoom]);
+  }, [pageNum]);
 
   useEffect(() => {
     console.log(pageNum, selectedRoom?.id);
@@ -53,11 +53,13 @@ const ChatContent = ({ selectedRoom }) => {
   }, [isInitial]);
 
   useEffect(() => {
-    if(selectedRoom?.id) {
-      setIsInitial(true);
-      setPageNum(0);
+    if (selectedRoom?.id) {
       setMsgList([]);
-      msgRef.current.removeEventListener('scroll', getExtraMsg, true);
+      setIsInitial(true);
+      setTimeout(() => {
+        setPageNum(0);  
+      }, 1000);
+      
       msgRef.current.addEventListener('scroll', getExtraMsg, true);
       return () => {
           msgRef.current.removeEventListener('scroll', getExtraMsg, true);
