@@ -29,6 +29,8 @@ const ChatContent = ({ selectedRoom }) => {
           setLastMsgCnt(res.data.data.length);
         } else if (res.data.resCd === 404) {
           msgRef.current.removeEventListener('scroll', getExtraMsg, true);
+          if(isInitial)
+            setIsInitial(false);
         }
         // AS-IS >> mongo db에 userId, name 모두 저장
         // TO-BE >> mongo db에는 userId만 저장하고 채팅방에 있는 사용자 리스트 조회하여 name 매핑 (name 변경 고려)
