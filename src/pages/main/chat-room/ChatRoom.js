@@ -31,6 +31,21 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
     setSelectedRoom(el);
   }
 
+  const deleteRoom = async(id) => {
+    const res = await RoomApi.deleteRoom({roomId: id});
+    if(res.status === 200) {
+      if(res.data.resCd === 200) {
+        console.log(res.data.data);
+      }
+      else {
+        alert(res.data.resMsg);
+      }
+    }
+    else {
+      alert('오류가 발생했습니다.');
+    }
+  }
+
   return (
     <>
       <s.Container>
@@ -44,6 +59,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
               <s.RecentMessage>
                 { el.recentMessage }
               </s.RecentMessage>
+              <s.RoomBtn onClick={() => deleteRoom(el.id)}>x</s.RoomBtn>
             </s.RoomBox>
           ) }
         </s.RoomList>

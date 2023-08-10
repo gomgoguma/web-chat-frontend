@@ -20,9 +20,10 @@ const ChatRoomSC = {
     border-bottom: 1px solid black;
     cursor: pointer;
     color: black;
+    position: relative;
   `,
   RoomName: styled.div`
-    font-size: 16px;
+    font-size: 14px;
     margin-left: 10px;
     margin-bottom: 10px;
     white-space: nowrap;
@@ -33,6 +34,11 @@ const ChatRoomSC = {
     font-size: 14px;
     color: #999;
     margin-left: 10px;
+  `,
+  RoomBtn: styled.button`
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
   `
 }
 

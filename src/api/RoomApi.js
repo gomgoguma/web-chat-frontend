@@ -3,13 +3,13 @@ import {ServerAddr} from '../config/Server';
 
 const api = axios.create({
   baseURL: `${ServerAddr}/api/room`,
-  withCredentials: true,
+  withCredentials: true
 });
 
 const RoomApi = {
-  createRoom: async (dto) => {
+  createRoom: async(obj) => {
     try {
-      const res = await api.post('', dto);
+      const res = await api.post('', obj);
       return res;
     } catch (err) {
       return err;
@@ -18,6 +18,14 @@ const RoomApi = {
   getRooms: async() => {
     try {
       const res = await api.get('');
+      return res;
+    } catch (err) {
+      return err;
+    }
+  },
+  deleteRoom: async(obj) => {
+    try {
+      const res = await api.delete('', { params: obj });
       return res;
     } catch (err) {
       return err;
