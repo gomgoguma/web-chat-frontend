@@ -3,6 +3,8 @@ import s from './AddUserModalSC'
 import UserApi from '../../../api/UserApi'
 import RoomApi from '../../../api/RoomApi';
 import { debounce } from 'lodash';
+import Text from '../../text/Text';
+import Button from '../../button/Button';
 
 const AddUserModal = ({ closeModal, getRooms }) => {
 
@@ -57,7 +59,7 @@ const AddUserModal = ({ closeModal, getRooms }) => {
   
   const delayedSearch = useCallback(debounce((name) => {
     getUsers({excludeOwnYn: 'Y', name});
-  }, 300), []);
+  }, 200), []);
 
   const onChangeSearchName = (e) => {
     const inputValue = e.target.value;
@@ -79,12 +81,18 @@ const AddUserModal = ({ closeModal, getRooms }) => {
         <s.UserBox>
           {userList.map(el => 
             <s.UserRow key={el.id} selected={selectedRow.includes(el.id)} onClick={() => rowClicked(el.id)}>
-              {el.name}
+              <Text fontSize={'16px'} fontWeight={'100'}>{el.name}</Text>
             </s.UserRow>
           )}
         </s.UserBox>
-        <button>취소</button>
-        <button onClick={createRoom}>확인</button>
+        <s.ButtonBox>
+          <Button width={'100px'} height={'50px'} onClick={createRoom} disable={selectedRow.length <= 0}>
+            <Text fontSize={'15px'} fontWeight={'100'}>확인</Text>
+          </Button>
+          <Button width={'100px'} height={'50px'} onClick={closeModal}> 
+            <Text fontSize={'15px'} fontWeight={'100'}>취소</Text>
+          </Button>
+        </s.ButtonBox>
       </s.ModalContent>
     </s.ModalContainer>
   )

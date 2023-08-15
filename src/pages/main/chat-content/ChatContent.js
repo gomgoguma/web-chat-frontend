@@ -5,6 +5,7 @@ import { userAtom } from '../../../states/atom';
 import { useAtom } from 'jotai';
 import SockJsClient from "react-stomp";
 import ChatApi from '../../../api/ChatApi';
+import Text from '../../../common/text/Text';
 
 const ChatContent = ({ selectedRoom }) => {
   const [userInfo,] = useAtom(userAtom);
@@ -125,10 +126,10 @@ const ChatContent = ({ selectedRoom }) => {
   const renderTextWithLineBreaks = (text) => {
     const lines = text.split('\n');
     return lines.map((line, index) => (
-      <span key={index}>
+      <Text key={index} fontSize={'17px'} fontWeight={'100'}>
         {line}
         <br />
-      </span>
+      </Text>
     ));
   };
 
@@ -144,14 +145,14 @@ const ChatContent = ({ selectedRoom }) => {
                         debug={false}
                     />
 
-                    <s.Title> <span style={{marginLeft: '10px'}}>{selectedRoom.roomName}</span> </s.Title>
+                    <s.Title> <Text fontSize={'17px'} fontWeight={'600'} margin={'0 0 0 10px'}>{selectedRoom.roomName}</Text> </s.Title>
                     <s.MsgListBox ref={(ref) => msgRef.current = ref} >
                         {msgList.map((el, index) => 
                             <s.MsgBox ref={ index === msgList.length-1 ? lastMsgRef : index === Math.min(15-1, lastMsgCnt-1) ? prevFirstMsgRef : null}  key={index} myChat={Number(el.userId) === Number(userInfo.userId)}>
                                 <s.MsgContent>
-                                    <s.MsgUser> <span style={{fontSize:12}}> {el.name} </span> </s.MsgUser>
+                                    <s.MsgUser> <Text fontSize={'14px'} fontWeight={'100'}>{el.name}</Text> </s.MsgUser>
                                     <s.MsgText myChat={Number(el.userId) === Number(userInfo.userId)}> {renderTextWithLineBreaks(el.msg)} </s.MsgText>
-                                    <s.MsgDtm> <span style={{fontSize:12}}> {el.dtm.substring(11,16)} </span> </s.MsgDtm>
+                                    <s.MsgDtm> <Text fontSize={'14px'} fontWeight={'100'}>{el.dtm.substring(11,16)}</Text> </s.MsgDtm>
                                 </s.MsgContent>
                             </s.MsgBox>
                         )}
@@ -161,7 +162,9 @@ const ChatContent = ({ selectedRoom }) => {
                     </s.SendBox>
                 </>
                 : 
-                <>대화를 선택해주세요</>
+                <>
+                  <Text fontSize={'18px'} fontWeight={'100'}>대화를 선택해주세요</Text>
+                </>
             }
         </s.Container>
     </>

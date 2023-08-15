@@ -2,6 +2,7 @@ import s from './ChatRoomSC';
 import RoomApi from '../../../api/RoomApi';
 import AddUserModal from '../../../common/modal/addUserModal/AddUserModal';
 import { useEffect, useState } from 'react';
+import Text from '../../../common/text/Text';
 
 const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   const [isAddUserModal, setIsAddUserModal] = useState(false);
@@ -49,15 +50,15 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   return (
     <>
       <s.Container>
-        <div onClick={() => setIsAddUserModal(true)} style={{width:'100%', height:'30px', cursor: 'pointer', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'white', borderBottom: '1px solid black'}}> + </div>
+        <div onClick={() => setIsAddUserModal(true)} style={{width:'100%', height:'30px', cursor: 'pointer', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'white', borderBottom: '1px solid #bbb'}}> + </div>
         <s.RoomList>
           { roomList.map((el, index) =>  
             <s.RoomBox key={el.id} onClick={() => getMessage(el)} selected={el.id === selectedRoom?.id}>
               <s.RoomName>
-                { el.roomName }
+                <Text fontSize={'15px'} fontWeight={'700'}>{ el.roomName }</Text>
               </s.RoomName>
               <s.RecentMessage>
-                { el.recentMessage }
+                <Text fontSize={'15px'} fontWeight={'100'}>안녕하세요{ el.recentMessage }</Text>
               </s.RecentMessage>
               <s.RoomBtn onClick={() => deleteRoom(el.id)}>x</s.RoomBtn>
             </s.RoomBox>

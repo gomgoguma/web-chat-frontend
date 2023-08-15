@@ -15,13 +15,13 @@ import styled from 'styled-components';
         align-items: center;
         width:100%;
         min-height: 40px;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid #bbb;
     `;
 
     export const MsgListBox = styled.div`
         width: calc(100vw - 325px);
         height: calc(100vh - 240px);
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid #bbb;
         overflow-y: auto;
         padding: 10px;
     `;
@@ -35,7 +35,7 @@ import styled from 'styled-components';
     `;
 
     export const MsgContent = styled.div`
-        max-width: 400px;
+        max-width: 700px;
         display: flex;
         flex-direction: column;
     `;
@@ -45,28 +45,37 @@ import styled from 'styled-components';
     `;
 
     export const MsgText = styled.div`
-        //background-color: ${(props) => (props.myChat ? '#609966': '#EDF1D6')};
-        border: 1px solid black;
+        border: 1px solid #bbb;
         border-radius: 10px;
         padding: 10px;
     `;
 
     export const MsgDtm = styled.div`
-
+        display: flex;
+        justify-content: right;
+        margin: 5px 5px 0 0;
     `;
 
     export const SendBox =  styled.div`
         display: flex;
         justify-content: space-between;
         width:100%;
-        min-height: 150px;
+        min-height: 130px;
     `;
 
     export const SendMsg = styled.textarea`
         width: 100%;
-        height: 150px;
+        height: 130px;
         resize: none;
         border: none;
-        font-size:17px;
+        outline: none;
+        padding: 10px;
+        font-size:20px;
+        font-family: 'HakgyoansimWoojuR', sans-serif;
+        @font-face {
+            font-family: 'HakgyoansimWoojuR';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimWoojuR.woff2') format('woff2');
+            font-style: normal;
+        }
     `;
     

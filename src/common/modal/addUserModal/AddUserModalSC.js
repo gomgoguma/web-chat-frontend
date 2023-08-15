@@ -13,13 +13,15 @@ const AddUserModalSC = {
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    background-color: rgba(79, 79, 79, 0.6);
+
   `,
   ModalContent: styled.div`
     position: relative;
     background-color: #fff;
-    border:1px solid black;
     width: 400px;
     height: 500px;
+    border-radius: 5px;
   `,
   CloseButton: styled.button`
     position: absolute;
@@ -37,13 +39,15 @@ const AddUserModalSC = {
     left: 10px;
   `,
   InputName: styled.input`
-    width: 50%;
+    width: 80%;
     height: 30px;
+    border: 1px solid #bbb;
+    border-radius: 10px;
   `,
   UserBox: styled.div`
     margin-top: 60px;
     width: 100%;
-    height: 400px;
+    height: 380px;
     overflow-y: auto;
   `,
   UserRow: styled.div`
@@ -52,13 +56,23 @@ const AddUserModalSC = {
     height: 40px;
     padding-left: 10px;
     &:hover {
-      background-color: ${(props) => (props.selected ? '#566270' : '#a4afbc')};
-      color:white;
+      background-color: ${(props) => (props.selected ? '#71767c' : '#ababab')};
+      span {
+        color:white;
+      }
     }
-    background-color: ${(props) => (props.selected ? '#566270' : 'transparent')};
-    color: ${(props) => (props.selected ? 'white' : 'black')};
+    background-color: ${(props) => (props.selected ? '#71767c' : 'transparent')};
     cursor: pointer;
+
+    span {
+      color: ${(props) => (props.selected ? 'white' : 'black')};
+    }
+  `,
+  ButtonBox: styled.div`
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+    padding-right: 10px;
   `
-  
 } 
 export default AddUserModalSC;
