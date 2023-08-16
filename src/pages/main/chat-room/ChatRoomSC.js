@@ -21,19 +21,21 @@ const ChatRoomSC = {
     cursor: pointer;
     color: black;
     position: relative;
+    gap : 5px;
   `,
   RoomName: styled.div`
     font-size: 14px;
     margin-left: 10px;
-    margin-bottom: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 20px;
   `,
   RecentMessage: styled.div`
     font-size: 14px;
     color: #999;
     margin-left: 10px;
+    height: 20px;
   `,
   RoomBtn: styled.button`
     position: absolute;
