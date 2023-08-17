@@ -3,9 +3,13 @@ import RoomApi from '../../../api/RoomApi';
 import AddUserModal from '../../../common/modal/addUserModal/AddUserModal';
 import { useEffect, useState } from 'react';
 import Text from '../../../common/text/Text';
+import RoomContextMenu from '../../../common/context-menu/room/RoomContextMenu';
 
 const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   const [isAddUserModal, setIsAddUserModal] = useState(false);
+  const [isRoomContextMenu, setIsRoomContextMenu] = useState(false);
+  const [selectMenu, setSelectMenu] = useState();
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [roomList, setRoomList] = useState([]);
 
   const getRooms = async() => {
@@ -47,25 +51,33 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
     }
   }
 
+  const handleContextMenu = (event, room) => {
+    event.preventDefault();
+    setSelectMenu(room);
+    setMenuPosition({ x: event.clientX, y: event.clientY });
+    setIsRoomContextMenu(true);
+  }
+
   return (
     <>
       <s.Container>
         <div onClick={() => setIsAddUserModal(true)} style={{width:'100%', height:'30px', cursor: 'pointer', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'white', borderBottom: '1px solid #bbb'}}> + </div>
         <s.RoomList>
           { roomList.map((el, index) =>  
-            <s.RoomBox key={el.id} onClick={() => getMessage(el)} selected={el.id === selectedRoom?.id}>
+            <s.RoomBox key={el.id} onClick={() => getMessage(el)} selected={el.id === selectedRoom?.id} onContextMenu={(e) => handleContextMenu(e, el)}>
               <s.RoomName>
                 <Text fontSize={'15px'} fontWeight={'700'}>{ el.roomName }</Text>
               </s.RoomName>
               <s.RecentMessage>
                 <Text fontSize={'15px'} fontWeight={'100'} color={"#777"}>{ el.recentMsg }</Text>
               </s.RecentMessage>
-              <s.RoomBtn onClick={() => deleteRoom(el.id)}>x</s.RoomBtn>
+              {/* <s.RoomBtn onClick={() => deleteRoom(el.id)}>x</s.RoomBtn> */}
             </s.RoomBox>
           ) }
         </s.RoomList>
       </s.Container>
       {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } getRooms={getRooms} /> }
+      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)}/>}
     </>
   );
 }
