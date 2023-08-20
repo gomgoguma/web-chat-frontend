@@ -58,8 +58,8 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
               </s.RoomName>
               <s.RecentMessage>
                 <Text fontSize={'15px'} fontWeight={'100'} color={"#777"}>{ el.recentMsg }</Text>
+                <Text fontSize={'13px'} fontWeight={'100'} color={"#777"}>{ el.recentMsgDtm.substring(11,16) }</Text>
               </s.RecentMessage>
-              {/* <s.RoomBtn onClick={() => deleteRoom(el.id)}>x</s.RoomBtn> */}
             </s.RoomBox>
           ) }
         </s.RoomList>

@@ -40,9 +40,11 @@ const ChatRoomSC = {
     height: 20px;
   `,
   RecentMessage: styled.div`
+    display: flex;
+    justify-content: space-between;
     font-size: 14px;
     color: #999;
-    margin-left: 10px;
+    margin: 0 10px;
     height: 20px;
   `,
   RoomBtn: styled.button`
