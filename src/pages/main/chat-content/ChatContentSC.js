@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
     export const Container = styled.div`
-        width: calc(100vw - 300px);
+        width: calc(100vw - 330px);
         height: calc(100vh - 52px);
         display: flex;
         flex-direction: column;
@@ -19,7 +19,7 @@ import styled from 'styled-components';
     `;
 
     export const MsgListBox = styled.div`
-        width: calc(100vw - 325px);
+        width: calc(100vw - 355px);
         height: calc(100vh - 240px);
         border-bottom: 1px solid #bbb;
         overflow-y: auto;

@@ -36,20 +36,6 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
     setSelectedRoom(el);
   }
 
-  const deleteRoom = async(id) => {
-    const res = await RoomApi.deleteRoom({roomId: id});
-    if(res.status === 200) {
-      if(res.data.resCd === 200) {
-        console.log(res.data.data);
-      }
-      else {
-        alert(res.data.resMsg);
-      }
-    }
-    else {
-      alert('오류가 발생했습니다.');
-    }
-  }
 
   const handleContextMenu = (event, room) => {
     event.preventDefault();
@@ -61,7 +47,9 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   return (
     <>
       <s.Container>
-        <div onClick={() => setIsAddUserModal(true)} style={{width:'100%', height:'30px', cursor: 'pointer', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'white', borderBottom: '1px solid #bbb'}}> + </div>
+        <s.RoomBtnBox>
+          <img onClick={() => setIsAddUserModal(true)} src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>
+        </s.RoomBtnBox>
         <s.RoomList>
           { roomList.map((el, index) =>  
             <s.RoomBox key={el.id} onClick={() => getMessage(el)} selected={el.id === selectedRoom?.id} onContextMenu={(e) => handleContextMenu(e, el)}>
@@ -77,7 +65,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
         </s.RoomList>
       </s.Container>
       {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } getRooms={getRooms} /> }
-      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)}/>}
+      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} callback={() => getRooms()}/>}
     </>
   );
 }

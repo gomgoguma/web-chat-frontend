@@ -2,10 +2,18 @@ import styled from 'styled-components';
 
 const ChatRoomSC = {
   Container: styled.div`
-      min-width: 300px;
-      max-width: 300px;
+      min-width: 330px;
+      max-width: 330px;
       border-right:1px solid #bbb;
       height: calc(100vh - 52px);
+  `,
+  RoomBtnBox: styled.div`
+    height: 30px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    border-bottom: 1px solid #bbb;
+    padding-right: 5px;
   `,
   RoomList: styled.div`
     overflow-y: auto;

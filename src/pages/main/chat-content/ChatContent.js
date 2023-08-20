@@ -152,7 +152,7 @@ const ChatContent = ({ selectedRoom }) => {
                                 <s.MsgContent>
                                     <s.MsgUser> <Text fontSize={'14px'} fontWeight={'100'}>{el.name}</Text> </s.MsgUser>
                                     <s.MsgText myChat={Number(el.userId) === Number(userInfo.userId)}> {renderTextWithLineBreaks(el.msg)} </s.MsgText>
-                                    <s.MsgDtm> <Text fontSize={'14px'} fontWeight={'100'}>{el.dtm.substring(11,16)}</Text> </s.MsgDtm>
+                                    <s.MsgDtm> <Text fontSize={'12px'} fontWeight={'100'}>{el.dtm.substring(11,16)}</Text> </s.MsgDtm>
                                 </s.MsgContent>
                             </s.MsgBox>
                         )}
@@ -163,7 +163,7 @@ const ChatContent = ({ selectedRoom }) => {
                 </>
                 : 
                 <>
-                  <Text fontSize={'18px'} fontWeight={'100'}>대화를 선택해주세요</Text>
+                  <Text fontSize={'18px'} fontWeight={'600'}>대화를 선택해주세요</Text>
                 </>
             }
         </s.Container>
