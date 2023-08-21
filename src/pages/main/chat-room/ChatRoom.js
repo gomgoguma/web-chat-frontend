@@ -48,17 +48,17 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
     setIsRoomContextMenu(true);
   }
 
-  const handleOnMessage = () => {
-  
+  const handleOnMessage = (msg) => {
+    console.log(msg);
   }
 
   return (
     <>
       <SockJsClient
           url={"http://localhost:8080/my-chat/"}
-          topics={[`/topic/group/${userInfo.id}`]}
+          topics={[`/topic/group/user${userInfo.userId}`]}
           onMessage={(msg) => handleOnMessage(msg)}
-          debug={false}
+          debug={ false }
       />
       <s.Container>
         <s.RoomBtnBox>
