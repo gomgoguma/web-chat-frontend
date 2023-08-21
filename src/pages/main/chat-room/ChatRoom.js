@@ -4,6 +4,9 @@ import AddUserModal from '../../../common/modal/addUserModal/AddUserModal';
 import { useEffect, useState } from 'react';
 import Text from '../../../common/text/Text';
 import RoomContextMenu from '../../../common/context-menu/room/RoomContextMenu';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../../states/atom';
+import SockJsClient from "react-stomp";
 
 const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   const [isAddUserModal, setIsAddUserModal] = useState(false);
@@ -11,6 +14,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   const [selectMenu, setSelectMenu] = useState();
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [roomList, setRoomList] = useState([]);
+  const [userInfo,] = useAtom(userAtom);
 
   const getRooms = async() => {
     const res = await RoomApi.getRooms();
@@ -44,8 +48,18 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
     setIsRoomContextMenu(true);
   }
 
+  const handleOnMessage = () => {
+  
+  }
+
   return (
     <>
+      <SockJsClient
+          url={"http://localhost:8080/my-chat/"}
+          topics={[`/topic/group/${userInfo.id}`]}
+          onMessage={(msg) => handleOnMessage(msg)}
+          debug={false}
+      />
       <s.Container>
         <s.RoomBtnBox>
           <img onClick={() => setIsAddUserModal(true)} src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>
@@ -58,7 +72,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
               </s.RoomName>
               <s.RecentMessage>
                 <Text fontSize={'15px'} fontWeight={'100'} color={"#777"}>{ el.recentMsg }</Text>
-                <Text fontSize={'13px'} fontWeight={'100'} color={"#777"}>{ el.recentMsgDtm.substring(11,16) }</Text>
+                <Text fontSize={'13px'} fontWeight={'100'} color={"#777"}>{ el.recentMsgDtm?.substring(11,16) }</Text>
               </s.RecentMessage>
             </s.RoomBox>
           ) }
