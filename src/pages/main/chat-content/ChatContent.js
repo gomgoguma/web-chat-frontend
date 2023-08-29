@@ -150,7 +150,7 @@ const ChatContent = ({ selectedRoom }) => {
                         {msgList.map((el, index) => 
                             <s.MsgBox ref={ index === msgList.length-1 ? lastMsgRef : index === Math.min(15-1, lastMsgCnt-1) ? prevFirstMsgRef : null}  key={index} myChat={Number(el.userId) === Number(userInfo.userId)}>
                                 <s.MsgContent>
-                                    <s.MsgUser> <Text fontSize={'14px'} fontWeight={'100'}>{el.name}</Text> </s.MsgUser>
+                                    <s.MsgUser> <Text fontSize={'13px'} fontWeight={'100'}>{el.name}</Text> </s.MsgUser>
                                     <s.MsgText myChat={Number(el.userId) === Number(userInfo.userId)}> {renderTextWithLineBreaks(el.msg)} </s.MsgText>
                                     <s.MsgDtm> <Text fontSize={'12px'} fontWeight={'100'}>{el.dtm.substring(11,16)}</Text> </s.MsgDtm>
                                 </s.MsgContent>

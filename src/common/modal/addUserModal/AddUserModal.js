@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import Text from '../../text/Text';
 import Button from '../../button/Button';
 
-const AddUserModal = ({ closeModal, getRooms }) => {
+const AddUserModal = ({ closeModal, getRooms, setSelectedRoom }) => {
 
   const [selectedRow, setSelectedRow] = useState([]);
   const [userList, setUserList] = useState([]);
@@ -38,9 +38,9 @@ const AddUserModal = ({ closeModal, getRooms }) => {
     } 
   };
 
-  const rowClicked = (id) => {
+  const rowClicked = (user) => {
     setSelectedRow(
-      selectedRow.includes(id) ? selectedRow.filter(el => el !== id) : [...selectedRow, id]
+      selectedRow.includes(user) ? selectedRow.filter(el => el !== user) : [...selectedRow, user]
     );
   }
 
@@ -48,11 +48,12 @@ const AddUserModal = ({ closeModal, getRooms }) => {
     if(selectedRow.length <= 0)
       alert('대화할 사용자를 선택해주세요');
     else {
-      const res = await RoomApi.createRoom({userIdList: selectedRow});
+      const userIds = selectedRow.map(el => el.id);
+      const res = await RoomApi.createRoom({userIdList: userIds});
       if(res.status === 200) {
-        alert('대화 시작');
         closeModal();
         getRooms();
+        setSelectedRoom({id: res.data.data, roomName: selectedRow.map(el => el.name).join(", ") });
       }
     }
   }
@@ -80,7 +81,7 @@ const AddUserModal = ({ closeModal, getRooms }) => {
         </s.SearchBar>
         <s.UserBox>
           {userList.map(el => 
-            <s.UserRow key={el.id} selected={selectedRow.includes(el.id)} onClick={() => rowClicked(el.id)}>
+            <s.UserRow key={el.id} selected={selectedRow.includes(el)} onClick={() => rowClicked(el)}>
               <Text fontSize={'16px'} fontWeight={'100'}>{el.name}</Text>
             </s.UserRow>
           )}

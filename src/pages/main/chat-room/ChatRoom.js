@@ -49,14 +49,26 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   }
 
   const handleOnMessage = (msg) => {
-    console.log(msg);
+    console.log('msg : ',msg);
+    if(msg.roomName) {
+      console.log('1');
+      if (!roomList.some(el => el.id === msg.roomId)) {
+        console.log('2');
+        setRoomList([...roomList, {
+          id: msg.roomId,
+          roomName: msg.roomName,
+          recentMsg: msg.msg,
+        }]);
+      }
+    }
+    
   }
 
   return (
     <>
       <SockJsClient
           url={"http://localhost:8080/my-chat/"}
-          topics={[`/topic/group/user${userInfo.userId}`]}
+          topics={[`/topic/user/${userInfo.userId}`]}
           onMessage={(msg) => handleOnMessage(msg)}
           debug={ false }
       />
@@ -78,7 +90,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
           ) }
         </s.RoomList>
       </s.Container>
-      {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } getRooms={getRooms} /> }
+      {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } getRooms={getRooms} setSelectedRoom={setSelectedRoom}/> }
       {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} callback={() => getRooms()}/>}
     </>
   );
