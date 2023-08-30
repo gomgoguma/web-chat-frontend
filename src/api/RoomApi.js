@@ -15,9 +15,17 @@ const RoomApi = {
       return err;
     }
   },
-  getRooms: async() => {
+  getRoom: async(obj) => {
     try {
-      const res = await api.get('');
+      const res = await api.get('', {params: obj});
+      return res;
+    } catch (err) {
+      return err;
+    }
+  },
+  getMyRooms: async() => {
+    try {
+      const res = await api.get('/my');
       return res;
     } catch (err) {
       return err;

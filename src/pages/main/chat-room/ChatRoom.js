@@ -8,7 +8,7 @@ import { useAtom } from 'jotai';
 import { userAtom } from '../../../states/atom';
 import SockJsClient from "react-stomp";
 
-const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
+const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
   const [isAddUserModal, setIsAddUserModal] = useState(false);
   const [isRoomContextMenu, setIsRoomContextMenu] = useState(false);
   const [selectMenu, setSelectMenu] = useState();
@@ -17,7 +17,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
   const [userInfo,] = useAtom(userAtom);
 
   const getRooms = async() => {
-    const res = await RoomApi.getRooms();
+    const res = await RoomApi.getMyRooms();
     if(res.status === 200) {
       if(res.data.resCd === 200) {
         setRoomList(res.data.data);
@@ -48,20 +48,35 @@ const ChatRoom = ({setSelectedRoom, selectedRoom}) => {
     setIsRoomContextMenu(true);
   }
 
-  const handleOnMessage = (msg) => {
-    console.log('msg : ',msg);
-    if(msg.roomName) {
-      console.log('1');
-      if (!roomList.some(el => el.id === msg.roomId)) {
-        console.log('2');
-        setRoomList([...roomList, {
-          id: msg.roomId,
-          roomName: msg.roomName,
-          recentMsg: msg.msg,
-        }]);
+  const handleOnMessage = async(msg) => {
+    if (!roomList.some(el => el.id === msg.roomId)) {
+      const res = await RoomApi.getRoom({roomId: msg.roomId});
+      if(res.status === 200) {
+        if(res.data.resCd === 200) {
+          res.data.data.recentMsg = msg.msg;
+          res.data.data.recentMsgDtm = msg.dtm;
+          setRoomList([res.data.data, ...roomList]);
+        }
+      }
+      else {
+        alert('오류가 발생했습니다.');
       }
     }
-    
+    else {
+      let newMsgRoom = roomList.find(el => el.id === msg.roomId);
+      if(newMsgRoom) {
+        newMsgRoom.recentMsg = msg.msg;
+        newMsgRoom.recentMsgDtm = msg.dtm;
+        setRoomList([
+          newMsgRoom,
+          ...roomList.filter(el => el.id != msg.roomId)
+        ]);
+
+        if(selectedRoom?.id === msg.roomId && userInfo.userId !== msg.userId) {
+          setMsgList([...msgList, msg]);
+        }
+      }
+    }
   }
 
   return (

@@ -7,11 +7,10 @@ import SockJsClient from "react-stomp";
 import ChatApi from '../../../api/ChatApi';
 import Text from '../../../common/text/Text';
 
-const ChatContent = ({ selectedRoom }) => {
+const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
   const [userInfo,] = useAtom(userAtom);
   const [pageNum, setPageNum] = useState();
   const [lastMsgCnt, setLastMsgCnt] = useState(0);
-  const [msgList, setMsgList] = useState([]);
   const msgRef = useRef(null);
   const prevFirstMsgRef = useRef(null);
   const lastMsgRef = useRef(null);

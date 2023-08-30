@@ -6,14 +6,15 @@ import ChatContent from './chat-content/ChatContent';
 
 const Main = () => {
     const [selectedRoom, setSelectedRoom] = useState();
+    const [msgList, setMsgList] = useState([]);
 
     return (
     <>
         <s.Container>            
             <Header />
             <s.Content>
-                <ChatRoom setSelectedRoom={setSelectedRoom} selectedRoom={selectedRoom} />
-                <ChatContent selectedRoom={selectedRoom} />
+                <ChatRoom setSelectedRoom={setSelectedRoom} selectedRoom={selectedRoom} msgList={msgList} setMsgList={setMsgList}/>
+                <ChatContent selectedRoom={selectedRoom} msgList={msgList} setMsgList={setMsgList}/>
             </s.Content>
         </s.Container>
     </>
