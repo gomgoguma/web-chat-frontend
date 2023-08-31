@@ -57,9 +57,12 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
   useEffect(() => {
     if (msgRef.current) {
       msgRef.current.addEventListener('scroll', getExtraMsg, true);
-      return () => {
+    }
+
+    return () => {
+      if(msgRef.current) {
         msgRef.current.removeEventListener('scroll', getExtraMsg, true);
-      };
+      }
     }
   }, [getExtraMsg]);
 
@@ -112,15 +115,6 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
       // 메시지를 연속으로 빠르게 보내는 경우 메시지 순서 관리
       }
     }
-
-  const handleOnMessage = (msg) => {
-    if (msg.userId !== userInfo.userId) {
-      setMsgList([...msgList, msg]);
-    }
-    else { // 본인 메시지 전송 결과 못받으면 오류 처리
-
-    }
-  }
   
   const renderTextWithLineBreaks = (text) => {
     const lines = text.split('\n');
@@ -137,13 +131,6 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
         <s.Container>
             {selectedRoom ? 
                 <>
-                    <SockJsClient
-                        url={"http://localhost:8080/my-chat/"}
-                        topics={[`/topic/group/${selectedRoom.id}`]}
-                        onMessage={(msg) => handleOnMessage(msg)}
-                        debug={false}
-                    />
-
                     <s.Title> <Text fontSize={'17px'} fontWeight={'600'} margin={'0 0 0 10px'}>{selectedRoom.roomName}</Text> </s.Title>
                     <s.MsgListBox ref={(ref) => msgRef.current = ref} >
                         {msgList.map((el, index) => 

@@ -106,7 +106,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
         </s.RoomList>
       </s.Container>
       {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } getRooms={getRooms} setSelectedRoom={setSelectedRoom}/> }
-      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} callback={() => getRooms()}/>}
+      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} callback={() => getRooms()} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>}
     </>
   );
 }

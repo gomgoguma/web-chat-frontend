@@ -3,7 +3,7 @@ import * as s from './RoomContextMenuSC';
 import Text from "../../text/Text";
 import RoomApi from "../../../api/RoomApi";
 
-const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, callback}) => {
+const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, callback, selectedRoom, setSelectedRoom}) => {
     const contextMenuRef = useRef(null);
 
     useEffect(() => {
@@ -27,6 +27,9 @@ const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, callback})
             if(res.status === 200) {
                 if(res.data.resCd === 200) {
                     console.log(res.data.data);
+                    if(selectedRoom?.id === selectMenu.id) {
+                        setSelectedRoom();
+                    }
                     callback();
                 }
                 else {
