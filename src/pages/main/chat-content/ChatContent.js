@@ -24,19 +24,17 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
       }
       const res = await MsgApi.getMsgs({ roomId: selectedRoom?.id, pageNum: pageNum });
       if (res.status === 200) {
-        if (res.data.resCd === 200) {
-          setMsgList((msgList) => [...res.data.data, ...msgList]);
-          setLastMsgCnt(res.data.data.length);
-        } else if (res.data.resCd === 404) {
-          msgRef.current.removeEventListener('scroll', getExtraMsg, true);
-          if(isInitial)
-            setIsInitial(false);
-        }
+        const {resCd, resMsg, data, pageInfo} = res.data;
+        if (resCd === 200) {
+          setMsgList((msgList) => [...data, ...msgList]);
+          setLastMsgCnt(pageInfo.pageDataCount);
+
+          if (!pageInfo?.hasNext) {
+            msgRef.current.removeEventListener('scroll', getExtraMsg, true);            
+          }
+        } 
         // AS-IS >> mongo db에 userId, name 모두 저장
         // TO-BE >> mongo db에는 userId만 저장하고 채팅방에 있는 사용자 리스트 조회하여 name 매핑 (name 변경 고려)
-      }
-      else {
-        alert('오류가 발생했습니다.');
       }
     }
   }, [pageNum, isInitial]);
@@ -78,13 +76,13 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
     if (msgRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = msgRef.current;
       const lastMsgHeight = lastMsgRef?.current?.offsetHeight;
-      if(msgList.length > 0 && isInitial) {
+      if(msgList.length > 0 && isInitial) { // 채팅방 최초 입장 시 스크롤 최하단으로 이동
         setIsInitial(false);
         msgRef.current.scrollTop = msgRef.current.scrollHeight;
-      } else if ( scrollTop + clientHeight >= scrollHeight - lastMsgHeight - 11) {
+      } else if ( scrollTop + clientHeight >= scrollHeight - lastMsgHeight - 11) { // 스크롤 최하단일 때 
         msgRef.current.scrollTop = msgRef.current.scrollHeight;
       }
-      else if (scrollTop === 0 && pageNum > 0 && prevFirstMsgRef.current) {
+      else if (scrollTop === 0 && pageNum > 0 && prevFirstMsgRef.current) { // 윗방향 무한스크롤 스크롤 위치 유지
         msgRef.current.scrollTop = prevFirstMsgRef.current.offsetTop-17;
       }
     }

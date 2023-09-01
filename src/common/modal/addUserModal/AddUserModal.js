@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import Text from '../../text/Text';
 import Button from '../../button/Button';
 
-const AddUserModal = ({ closeModal, getRooms, setSelectedRoom }) => {
+const AddUserModal = ({ closeModal, selectCreateRoom }) => {
 
   const [selectedRow, setSelectedRow] = useState([]);
   const [userList, setUserList] = useState([]);
@@ -15,16 +15,13 @@ const AddUserModal = ({ closeModal, getRooms, setSelectedRoom }) => {
   const getUsers = async(param) => {
     const res = await UserApi.getUsers(param);
     if(res.status === 200) {
-      if(res.data.resCd === 200) {
-        setUserList(res.data.data);
-        console.log(res.data.data);
+      const {resCd, resMsg, data} = res.data;
+      if(resCd === 200) {
+        setUserList(data);
       }
-      else if(res.data.resCd === 404) {
+      else if(resCd === 404) {
         setUserList([]);
       }
-    }
-    else {
-      alert('오류가 발생했습니다.');
     }
   }
 
@@ -52,8 +49,10 @@ const AddUserModal = ({ closeModal, getRooms, setSelectedRoom }) => {
       const res = await RoomApi.createRoom({userIdList: userIds});
       if(res.status === 200) {
         closeModal();
-        getRooms();
-        setSelectedRoom({id: res.data.data, roomName: selectedRow.map(el => el.name).join(", ") });
+        const {resCd, resMsg, data} = res.data;
+        if(resCd === 200) {
+          selectCreateRoom(data);
+        }
       }
     }
   }

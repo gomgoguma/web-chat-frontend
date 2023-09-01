@@ -3,7 +3,7 @@ import * as s from './RoomContextMenuSC';
 import Text from "../../text/Text";
 import RoomApi from "../../../api/RoomApi";
 
-const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, callback, selectedRoom, setSelectedRoom}) => {
+const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, getRooms, selectedRoom, setSelectedRoom}) => {
     const contextMenuRef = useRef(null);
 
     useEffect(() => {
@@ -25,19 +25,16 @@ const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, callback, 
         if(check) {
             const res = await RoomApi.deleteRoom({roomId: selectMenu.id});
             if(res.status === 200) {
-                if(res.data.resCd === 200) {
-                    console.log(res.data.data);
+                const {resCd, resMsg, data} = res.data;
+                if(resCd === 200) {
                     if(selectedRoom?.id === selectMenu.id) {
                         setSelectedRoom();
                     }
-                    callback();
+                    getRooms();
                 }
                 else {
-                    alert(res.data.resMsg);
+                    alert(resMsg);
                 }
-            }
-            else {
-                alert('오류가 발생했습니다.');
             }
         }
     }

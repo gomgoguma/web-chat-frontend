@@ -10,14 +10,14 @@ const useAuth = () => {
 
     const check = async() => {
         const res = await userApi.check();
-        console.log(res);
         if(res.status === 200) {
-            if(res.data.resCd === 200) {
-                setUserInfo(res.data.data);
-                console.log('userInfo', res.data.data);
+            const {resCd, resMsg, data} = res.data;
+            if(resCd === 200) {
+                setUserInfo(data);
+                console.log('userInfo', data);
             }
             else {
-                if(res.data.resMsg === '토큰이 없습니다.') {
+                if(resMsg === '토큰이 없습니다.') {
                     alert('로그인 후 이용해주세요.');
                 }
                 else {

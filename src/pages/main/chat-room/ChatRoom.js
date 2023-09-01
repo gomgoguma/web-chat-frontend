@@ -19,16 +19,27 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
   const getRooms = async() => {
     const res = await RoomApi.getMyRooms();
     if(res.status === 200) {
-      if(res.data.resCd === 200) {
-        setRoomList(res.data.data);
-        console.log(res.data.data);
+      const {resCd, data} = res.data;
+      if(resCd === 200) {
+        setRoomList(data);
       }
-      else {
-        alert(res.data.resMsg);
+      else if(resCd === 404) {
+        setRoomList([]);
       }
     }
-    else {
-      alert('오류가 발생했습니다.');
+  }
+
+  const selectCreateRoom = async(roomId) => {
+    const res = await RoomApi.getMyRooms();
+    if(res.status === 200) {
+      const {resCd, resMsg, data} = res.data;
+      if(resCd === 200) {
+        setRoomList(data);
+        setSelectedRoom(data.find(el => el.id === roomId));
+      }
+      else {
+        alert(resMsg);
+      }
     }
   }
   
@@ -52,14 +63,12 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
     if (!roomList.some(el => el.id === msg.roomId)) {
       const res = await RoomApi.getRoom({roomId: msg.roomId});
       if(res.status === 200) {
-        if(res.data.resCd === 200) {
-          res.data.data.recentMsg = msg.msg;
-          res.data.data.recentMsgDtm = msg.dtm;
-          setRoomList([res.data.data, ...roomList]);
+        let {resCd, resMsg, data} = res.data;
+        if(resCd === 200) {
+          data.recentMsg = msg.msg;
+          data.recentMsgDtm = msg.dtm;
+          setRoomList([data, ...roomList]);
         }
-      }
-      else {
-        alert('오류가 발생했습니다.');
       }
     }
     else {
@@ -105,8 +114,8 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
           ) }
         </s.RoomList>
       </s.Container>
-      {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } getRooms={getRooms} setSelectedRoom={setSelectedRoom}/> }
-      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} callback={() => getRooms()} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>}
+      {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } selectCreateRoom={selectCreateRoom}/> }
+      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} getRooms={() => getRooms()} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>}
     </>
   );
 }
