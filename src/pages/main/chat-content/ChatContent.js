@@ -4,7 +4,6 @@ import * as s from './ChatContentSC';
 import { userAtom } from '../../../states/atom';
 import { useAtom } from 'jotai';
 import SockJsClient from "react-stomp";
-import ChatApi from '../../../api/ChatApi';
 import Text from '../../../common/text/Text';
 
 const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
@@ -32,7 +31,11 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
           if (!pageInfo?.hasNext) {
             msgRef.current.removeEventListener('scroll', getExtraMsg, true);            
           }
-        } 
+        }
+        else {
+          setMsgList();
+        }
+        
         // AS-IS >> mongo db에 userId, name 모두 저장
         // TO-BE >> mongo db에는 userId만 저장하고 채팅방에 있는 사용자 리스트 조회하여 name 매핑 (name 변경 고려)
       }
@@ -76,10 +79,10 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
     if (msgRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = msgRef.current;
       const lastMsgHeight = lastMsgRef?.current?.offsetHeight;
-      if(msgList.length > 0 && isInitial) { // 채팅방 최초 입장 시 스크롤 최하단으로 이동
-        setIsInitial(false);
+      if(isInitial && (msgList?.length > 0 || !msgList)) { // 채팅방 최초 입장 시 스크롤 최하단으로 이동
         msgRef.current.scrollTop = msgRef.current.scrollHeight;
-      } else if ( scrollTop + clientHeight >= scrollHeight - lastMsgHeight - 11) { // 스크롤 최하단일 때 
+        setIsInitial(false);
+      }else if ( scrollTop + clientHeight >= scrollHeight - lastMsgHeight - 11) { // 스크롤 최하단일 때 
         msgRef.current.scrollTop = msgRef.current.scrollHeight;
       }
       else if (scrollTop === 0 && pageNum > 0 && prevFirstMsgRef.current) { // 윗방향 무한스크롤 스크롤 위치 유지
@@ -105,9 +108,12 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
       e.target.value = '';
       // 본인 메시지는 바로 표시
       if (msg.userId === userInfo.userId) {
-        setMsgList([...msgList, msg]);
+        if(msgList)
+          setMsgList([...msgList, msg]);
+        else
+          setMsgList([msg]);
       }
-      const res = await ChatApi.sendMessage(msg);
+      const res = await MsgApi.sendMessage(msg);
       
       // TODO
       // 메시지를 연속으로 빠르게 보내는 경우 메시지 순서 관리
@@ -131,7 +137,7 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
                 <>
                     <s.Title> <Text fontSize={'17px'} fontWeight={'600'} margin={'0 0 0 10px'}>{selectedRoom.roomName}</Text> </s.Title>
                     <s.MsgListBox ref={(ref) => msgRef.current = ref} >
-                        {msgList.map((el, index) => 
+                        {msgList?.map((el, index) => 
                             <s.MsgBox ref={ index === msgList.length-1 ? lastMsgRef : index === Math.min(15-1, lastMsgCnt-1) ? prevFirstMsgRef : null}  key={index} myChat={Number(el.userId) === Number(userInfo.userId)}>
                                 <s.MsgContent>
                                     <s.MsgUser> <Text fontSize={'13px'} fontWeight={'100'}>{el.name}</Text> </s.MsgUser>

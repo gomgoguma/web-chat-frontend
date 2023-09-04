@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import userApi from '../../../api/UserApi';
 import { useNavigate } from "react-router-dom";
 import Text from "../../../common/text/Text";
+import Input from "../../../common/input/Input";
 
 
 const Login = () => {
@@ -37,18 +38,16 @@ const Login = () => {
     return (
         <s.Container>
             <s.LoginBox> 
-                <s.InputRow>
-                    <Text fontSize={'16px'}>아이디</Text>
-                    <s.InputElement type="username" onChange={changeUsername}/>
+            <s.InputRow>
+                    <Input width={'100%'} height={'40px'} type="text" onChange={changeUsername} placeholder={"아이디"}/>
                 </s.InputRow>
                 <s.InputRow>
-                    <Text fontSize={'16px'}>패스워드 </Text>
-                    <s.InputElement type="password" onChange={changePassword}/>
+                    <Input width={'100%'} height={'40px'} type="password" onChange={changePassword} placeholder={"패스워드"}/>
                 </s.InputRow>
                 <s.LoginButton onClick={searchUser}>
                     <Text fontSize={'16px'}> 로그인 </Text>
                 </s.LoginButton>
-                <s.LoginButton>
+                <s.LoginButton onClick={() => navigate('/signup')}>
                     <Text fontSize={'16px'}> 회원가입 </Text>
                 </s.LoginButton>
             </s.LoginBox>

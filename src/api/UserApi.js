@@ -30,7 +30,15 @@ const UserApi = {
     } catch (err) {
       return err;
     }
-  }
+  },
+  signUp: async (obj) => {
+    try {
+      const res = await api.post('', obj);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  },
 };
 
 export default UserApi;

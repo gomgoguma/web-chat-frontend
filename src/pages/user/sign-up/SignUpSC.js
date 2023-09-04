@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-const LoginSC = {
+const SignUpSC = {
     Container: styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
     `,
-    LoginBox: styled.div`
+    SignUpBox: styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
@@ -23,10 +23,10 @@ const LoginSC = {
         width: 100%;
         height: 10%;
     `,
-    LoginButton: styled.button`
+    SignUpButton: styled.button`
         width: 100%;
         height: 40px;
     `,
 };
 
-export default LoginSC;
+export default SignUpSC;

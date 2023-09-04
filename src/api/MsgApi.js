@@ -14,7 +14,10 @@ const MsgApi = {
     } catch (err) {
       return err;
     }
-  }
+  },
+  sendMessage: (dto) => {
+    return api.post(`/send`, dto);
+  },
 };
 
 export default MsgApi;
