@@ -1,23 +1,26 @@
-import axios from 'axios';
-import {ServerAddr} from '../config/Server';
+import CreateApi from '../config/Api';
 
-const api = axios.create({
-  baseURL: `${ServerAddr}/api/msg`,
-  withCredentials: true,
-});
+const MsgApi = () => {
+  const api = CreateApi({
+    resource: 'msg',
+    requireAuth: true
+  });
 
-const MsgApi = {
-  getMsgs: async(dto) => {
-    try {
-      const res = await api.get('', { params: dto });
-      return res;
-    } catch (err) {
-      return err;
-    }
-  },
-  sendMessage: (dto) => {
-    return api.post(`/send`, dto);
-  },
-};
+  const msgApi = {
+    getMsgs: async(dto) => {
+      try {
+        const res = await api.get('', { params: dto });
+        return res;
+      } catch (err) {
+        return err;
+      }
+    },
+    sendMessage: (dto) => {
+      return api.post(`/send`, dto);
+    },
+  };
+
+  return msgApi;
+}
 
 export default MsgApi;

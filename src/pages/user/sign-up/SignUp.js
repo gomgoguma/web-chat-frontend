@@ -1,6 +1,6 @@
 import s from "./SignUpSC";
 import React, { useState } from 'react';
-import userApi from '../../../api/UserApi';
+import UserApi from '../../../api/UserApi';
 import { useNavigate } from "react-router-dom";
 import Text from "../../../common/text/Text";
 import Input from "../../../common/input/Input";
@@ -8,6 +8,7 @@ import Input from "../../../common/input/Input";
 
 const SignUp = () => {
     const navigate = useNavigate();
+    const userApi = UserApi();
 
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();

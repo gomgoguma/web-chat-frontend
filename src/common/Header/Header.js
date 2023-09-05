@@ -1,9 +1,14 @@
 import s from './HeaderSC'
 import useAuth from '../../hooks/useAuth';
 import Text from '../text/Text';
+import { useEffect } from 'react';
 
 const Header = () => {
-    useAuth();
+    const auth = useAuth();
+    useEffect(() => {
+        auth.check();
+    }, []);
+
     return (
         <>
             <s.Container>

@@ -5,6 +5,7 @@ import RoomApi from "../../../api/RoomApi";
 
 const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, getRooms, selectedRoom, setSelectedRoom}) => {
     const contextMenuRef = useRef(null);
+    const roomApi = RoomApi();
 
     useEffect(() => {
         const handleGlobalClick = (event) => {
@@ -23,7 +24,7 @@ const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, getRooms, 
         const check = window.confirm('삭제하시겠습니까?');
         closeContextMenu();
         if(check) {
-            const res = await RoomApi.deleteRoom({roomId: selectMenu.id});
+            const res = await roomApi.deleteRoom({roomId: selectMenu.id});
             if(res.status === 200) {
                 const {resCd, resMsg, data} = res.data;
                 if(resCd === 200) {

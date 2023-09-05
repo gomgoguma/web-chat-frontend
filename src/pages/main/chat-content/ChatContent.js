@@ -3,7 +3,6 @@ import MsgApi from '../../../api/MsgApi';
 import * as s from './ChatContentSC';
 import { userAtom } from '../../../states/atom';
 import { useAtom } from 'jotai';
-import SockJsClient from "react-stomp";
 import Text from '../../../common/text/Text';
 
 const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
@@ -15,13 +14,14 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
   const lastMsgRef = useRef(null);
 
   const [isInitial, setIsInitial] = useState(false);
+  const msgApi = MsgApi();
 
   const getMsgs = useCallback(async () => {
     if (selectedRoom?.id) {
       if(pageNum === 0 && !isInitial) {
         return;
       }
-      const res = await MsgApi.getMsgs({ roomId: selectedRoom?.id, pageNum: pageNum });
+      const res = await msgApi.getMsgs({ roomId: selectedRoom?.id, pageNum: pageNum });
       if (res.status === 200) {
         const {resCd, resMsg, data, pageInfo} = res.data;
         if (resCd === 200) {
@@ -113,7 +113,7 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
         else
           setMsgList([msg]);
       }
-      const res = await MsgApi.sendMessage(msg);
+      const res = await msgApi.sendMessage(msg);
       
       // TODO
       // 메시지를 연속으로 빠르게 보내는 경우 메시지 순서 관리
@@ -121,8 +121,8 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
     }
   
   const renderTextWithLineBreaks = (text) => {
-    const lines = text.split('\n');
-    return lines.map((line, index) => (
+    const lines = text?.split('\n');
+    return lines?.map((line, index) => (
       <Text key={index} fontSize={'17px'} fontWeight={'100'}>
         {line}
         <br />

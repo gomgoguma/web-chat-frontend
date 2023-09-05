@@ -1,11 +1,11 @@
 import s from './ChatRoomSC';
 import RoomApi from '../../../api/RoomApi';
 import AddUserModal from '../../../common/modal/addUserModal/AddUserModal';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Text from '../../../common/text/Text';
 import RoomContextMenu from '../../../common/context-menu/room/RoomContextMenu';
 import { useAtom } from 'jotai';
-import { userAtom } from '../../../states/atom';
+import { accessTokenAtom, userAtom } from '../../../states/atom';
 import SockJsClient from "react-stomp";
 
 const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
@@ -16,8 +16,22 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
   const [roomList, setRoomList] = useState([]);
   const [userInfo,] = useAtom(userAtom);
 
+  const roomApi = RoomApi();
+
+  const [accessToken,] = useAtom(accessTokenAtom);
+  const [stompHeaders, setStompHeaders] = useState();
+  
+  useEffect(() => {
+    if(accessToken){
+      setStompHeaders({
+        "Authorization": accessToken
+      });
+    }
+  }, [accessToken])
+  
+
   const getRooms = async() => {
-    const res = await RoomApi.getMyRooms();
+    const res = await roomApi.getMyRooms();
     if(res.status === 200) {
       const {resCd, data} = res.data;
       if(resCd === 200) {
@@ -30,7 +44,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
   }
 
   const selectCreateRoom = async(roomId) => {
-    const res = await RoomApi.getMyRooms();
+    const res = await roomApi.getMyRooms();
     if(res.status === 200) {
       const {resCd, resMsg, data} = res.data;
       if(resCd === 200) {
@@ -61,7 +75,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
 
   const handleOnMessage = async(msg) => {
     if (!roomList.some(el => el.id === msg.roomId)) {
-      const res = await RoomApi.getRoom({roomId: msg.roomId});
+      const res = await roomApi.getRoom({roomId: msg.roomId});
       if(res.status === 200) {
         let {resCd, resMsg, data} = res.data;
         if(resCd === 200) {
@@ -86,16 +100,43 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
         }
       }
     }
-  }
+  };
+  
+  // const stompConnect = useCallback(() => {
+  //   if(userInfo) {
+  //     const socket = new SockJS('http://localhost:8080/my-chat');
+  //     const options = {debug: false};
+      
+  //     const stompClient = Stomp.over(socket, options);
+  //     const headers = {
+  //       Authorization: accessToken
+  //     }
+      
+  //     stompClient.connect(headers, () => {
+  //       stompClient.subscribe(`/topic/user/${userInfo.userId}`, (message) => {
+  //         handleOnMessage(roomList, JSON.parse(message.body));
+  //       });
+  //     });
+
+  //     return () => {
+  //       stompClient.disconnect();
+  //     };
+  //   }
+  // }, [userInfo]);
+
+  // useEffect(() => {
+  //   stompConnect();
+  // }, [stompConnect]);
 
   return (
     <>
-      <SockJsClient
+      {userInfo && stompHeaders && <SockJsClient
           url={"http://localhost:8080/my-chat/"}
           topics={[`/topic/user/${userInfo.userId}`]}
           onMessage={(msg) => handleOnMessage(msg)}
           debug={ false }
-      />
+          headers={stompHeaders}
+      />}
       <s.Container>
         <s.RoomBtnBox>
           <img onClick={() => setIsAddUserModal(true)} src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>

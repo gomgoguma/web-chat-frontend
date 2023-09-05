@@ -8,12 +8,14 @@ import Button from '../../button/Button';
 
 const AddUserModal = ({ closeModal, selectCreateRoom }) => {
 
+  const userApi = UserApi();
+  const roomApi = RoomApi();
   const [selectedRow, setSelectedRow] = useState([]);
   const [userList, setUserList] = useState([]);
   const [searchName, setSearchName] = useState();
 
   const getUsers = async(param) => {
-    const res = await UserApi.getUsers(param);
+    const res = await userApi.getUsers(param);
     if(res.status === 200) {
       const {resCd, resMsg, data} = res.data;
       if(resCd === 200) {
@@ -46,7 +48,7 @@ const AddUserModal = ({ closeModal, selectCreateRoom }) => {
       alert('대화할 사용자를 선택해주세요');
     else {
       const userIds = selectedRow.map(el => el.id);
-      const res = await RoomApi.createRoom({userIdList: userIds});
+      const res = await roomApi.createRoom({userIdList: userIds});
       if(res.status === 200) {
         closeModal();
         const {resCd, resMsg, data} = res.data;

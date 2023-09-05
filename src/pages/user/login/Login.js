@@ -1,16 +1,19 @@
 import s from "./LoginSC";
 import React, { useState } from 'react';
-import userApi from '../../../api/UserApi';
 import { useNavigate } from "react-router-dom";
 import Text from "../../../common/text/Text";
 import Input from "../../../common/input/Input";
+import { accessTokenAtom } from "../../../states/atom";
+import { useAtom } from "jotai";
+import UserApi from "../../../api/UserApi";
 
 
 const Login = () => {
     const navigate = useNavigate();
-
+    const userApi = UserApi();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
+    const [, setAccessToken] = useAtom(accessTokenAtom);
 
     const changeUsername = (event) => {
         setUsername(event.target.value);
@@ -23,7 +26,9 @@ const Login = () => {
     const searchUser = async() => {
         const res = await userApi.login({username: username, password: password});
         if(res.status === 200) {
-            if(res.data.resCd === 200) {
+            const { data, resCd } = res.data;
+            if(resCd === 200) {
+                setAccessToken(data);
                 navigate('/');
             }
             else {
