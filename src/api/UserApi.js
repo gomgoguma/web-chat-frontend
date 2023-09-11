@@ -50,6 +50,14 @@ const UserApi = () => {
         return err;
       }
     },
+    logout: async (obj) => {
+      try {
+        const res = await loginApi.post('/logout', obj);
+        return res;
+      } catch (err) {
+        return err;
+      }
+    },
   };
 
   return userApi;
