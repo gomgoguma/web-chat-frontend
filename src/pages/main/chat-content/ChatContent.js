@@ -4,17 +4,21 @@ import * as s from './ChatContentSC';
 import { userAtom } from '../../../states/atom';
 import { useAtom } from 'jotai';
 import Text from '../../../common/text/Text';
+import { padStart } from 'lodash';
+import AddUserModal from '../../../common/modal/addUserModal/AddUserModal';
 
 const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
   const [userInfo,] = useAtom(userAtom);
+  const msgApi = MsgApi();
+  const [isAddUserModal, setIsAddUserModal] = useState(false);
   const [pageNum, setPageNum] = useState();
   const [lastMsgCnt, setLastMsgCnt] = useState(0);
   const msgRef = useRef(null);
   const prevFirstMsgRef = useRef(null);
   const lastMsgRef = useRef(null);
-
+  
   const [isInitial, setIsInitial] = useState(false);
-  const msgApi = MsgApi();
+  
 
   const getMsgs = useCallback(async () => {
     if (selectedRoom?.id) {
@@ -76,6 +80,7 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
   }, [selectedRoom?.id]);
 
   useEffect(() => {
+    console.log(msgList);
     if (msgRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = msgRef.current;
       const lastMsgHeight = lastMsgRef?.current?.offsetHeight;
@@ -99,20 +104,14 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
         return;
       }
       let msg = {
-          dtm: new Date(Date.now()).toISOString(),
+          dtm: new Date(new Date().getTime() + (9 * 60 * 60 * 1000)),
           msg: e.target.value,
           name: userInfo?.name,
           roomId: selectedRoom.id,
-          userId: userInfo?.userId
+          userId: userInfo?.userId,
+          type: 'chat'
       };
       e.target.value = '';
-      // 본인 메시지는 바로 표시
-      if (msg.userId === userInfo.userId) {
-        if(msgList)
-          setMsgList([...msgList, msg]);
-        else
-          setMsgList([msg]);
-      }
       const res = await msgApi.sendMessage(msg);
       
       // TODO
@@ -130,19 +129,38 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
     ));
   };
 
+  const renderTimeFormat = (text) => {
+    let time = text.toString().substring(11,16);
+    let hours = Number(time.substring(0,2));
+    const timeDv = hours/12 > 0 ? '오후' : '오전';
+    time = String(hours%12 || 12).padStart(2, '0') + time.substring(time.length - 3);
+    return timeDv + ' ' + time;
+  }
+
     return (
     <>
         <s.Container>
             {selectedRoom ? 
                 <>
-                    <s.Title> <Text fontSize={'17px'} fontWeight={'600'} margin={'0 0 0 10px'}>{selectedRoom.roomName}</Text> </s.Title>
+                    <s.Title> 
+                      <div>
+                        <Text fontSize={'17px'} fontWeight={'600'} margin={'0 0 0 10px'}>{selectedRoom.roomName}</Text>
+                      </div>
+                      <div style={{margin:'10px'}} onClick={() => setIsAddUserModal(true)}>
+                        <img src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>
+                      </div>
+                    </s.Title>
                     <s.MsgListBox ref={(ref) => msgRef.current = ref} >
                         {msgList?.map((el, index) => 
-                            <s.MsgBox ref={ index === msgList.length-1 ? lastMsgRef : index === Math.min(15-1, lastMsgCnt-1) ? prevFirstMsgRef : null}  key={index} myChat={Number(el.userId) === Number(userInfo.userId)}>
-                                <s.MsgContent>
+                            <s.MsgBox ref={ index === msgList.length-1 ? lastMsgRef : index === Math.min(15-1, lastMsgCnt-1) ? prevFirstMsgRef : null}  key={index} myChat={Number(el.userId) === Number(userInfo.userId)} chatType={el.type}>
+                                <s.MsgContent chatType={el.type}>
                                     <s.MsgUser> <Text fontSize={'13px'} fontWeight={'100'}>{el.name}</Text> </s.MsgUser>
                                     <s.MsgText myChat={Number(el.userId) === Number(userInfo.userId)}> {renderTextWithLineBreaks(el.msg)} </s.MsgText>
-                                    <s.MsgDtm> <Text fontSize={'12px'} fontWeight={'100'}>{el.dtm.substring(11,16)}</Text> </s.MsgDtm>
+                                    <s.MsgDtm> 
+                                      <Text fontSize={'12px'} fontWeight={'100'}>
+                                        {renderTimeFormat(el.dtm)}
+                                      </Text> 
+                                    </s.MsgDtm>
                                 </s.MsgContent>
                             </s.MsgBox>
                         )}
@@ -157,6 +175,7 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
                 </>
             }
         </s.Container>
+        {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false)} roomId={selectedRoom.id}/> }
     </>
     );
 }

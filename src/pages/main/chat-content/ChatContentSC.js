@@ -12,6 +12,7 @@ import styled from 'styled-components';
 
     export const Title = styled.div`
         display: flex;
+        justify-content: space-between;
         align-items: center;
         width:100%;
         min-height: 40px;
@@ -30,7 +31,7 @@ import styled from 'styled-components';
         width: 100%;
         min-width: 800px;
         display: flex;
-        justify-content: ${(props) => (props.myChat ? 'end': 'left')};
+        justify-content: ${(props) => (props.chatType === 'notification' ? 'center' : props.myChat ? 'end': 'left')};
         margin: 10px 0;
     `;
 

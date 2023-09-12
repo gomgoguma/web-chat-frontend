@@ -95,8 +95,14 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
           ...roomList.filter(el => el.id != msg.roomId)
         ]);
 
-        if(selectedRoom?.id === msg.roomId && userInfo.userId !== msg.userId) {
-          setMsgList([...msgList, msg]);
+        if(selectedRoom?.id === msg.roomId) {
+          if(msgList) {
+            setMsgList([...msgList, msg]);
+          }
+          else {
+            setMsgList([msg]);
+          }
+          
         }
       }
     }

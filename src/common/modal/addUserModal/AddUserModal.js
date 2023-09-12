@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import Text from '../../text/Text';
 import Button from '../../button/Button';
 
-const AddUserModal = ({ closeModal, selectCreateRoom }) => {
+const AddUserModal = ({ closeModal, selectCreateRoom, roomId }) => {
 
   const userApi = UserApi();
   const roomApi = RoomApi();
@@ -43,17 +43,22 @@ const AddUserModal = ({ closeModal, selectCreateRoom }) => {
     );
   }
 
-  const createRoom = async () => {
+  const addRoomUser = async () => {
     if(selectedRow.length <= 0)
       alert('대화할 사용자를 선택해주세요');
     else {
       const userIds = selectedRow.map(el => el.id);
-      const res = await roomApi.createRoom({userIdList: userIds});
+      const res = await roomApi.addRoomUser({
+        userIdList: userIds,
+        roomId: roomId,
+      });
       if(res.status === 200) {
         closeModal();
         const {resCd, resMsg, data} = res.data;
         if(resCd === 200) {
-          selectCreateRoom(data);
+          if(!roomId) {
+            selectCreateRoom(data);
+          }
         }
       }
     }
@@ -88,7 +93,7 @@ const AddUserModal = ({ closeModal, selectCreateRoom }) => {
           )}
         </s.UserBox>
         <s.ButtonBox>
-          <Button width={'100px'} height={'50px'} onClick={createRoom} disable={selectedRow.length <= 0}>
+          <Button width={'100px'} height={'50px'} onClick={addRoomUser} disable={selectedRow.length <= 0}>
             <Text fontSize={'15px'} fontWeight={'100'}>확인</Text>
           </Button>
           <Button width={'100px'} height={'50px'} onClick={closeModal}> 

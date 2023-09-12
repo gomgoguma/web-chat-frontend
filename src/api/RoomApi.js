@@ -8,7 +8,7 @@ const RoomApi = () => {
   );
 
   const Api = {
-    createRoom: async(obj) => {
+    addRoomUser: async(obj) => {
       try {
         const res = await api.post('', obj);
         return res;
