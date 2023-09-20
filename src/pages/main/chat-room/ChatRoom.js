@@ -9,12 +9,14 @@ import { accessTokenAtom, userAtom } from '../../../states/atom';
 import SockJsClient from "react-stomp";
 
 const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
-  const [isAddUserModal, setIsAddUserModal] = useState(false);
+  const [createRoomModal, setCreateRoomModal] = useState(false);
+  const [inviteModal, setInviteModal] = useState(false);
   const [isRoomContextMenu, setIsRoomContextMenu] = useState(false);
   const [selectMenu, setSelectMenu] = useState();
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [roomList, setRoomList] = useState([]);
   const [userInfo,] = useAtom(userAtom);
+  const [menuRoomId, setMenuRoomId] = useState();
 
   const roomApi = RoomApi();
 
@@ -133,6 +135,11 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
   // useEffect(() => {
   //   stompConnect();
   // }, [stompConnect]);
+  
+  const openInviteModal = (menuRoomId) => {
+    setMenuRoomId(menuRoomId);
+    setInviteModal(true);
+  }
 
   return (
     <>
@@ -145,7 +152,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
       />}
       <s.Container>
         <s.RoomBtnBox>
-          <img onClick={() => setIsAddUserModal(true)} src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>
+          <img onClick={() => setCreateRoomModal(true)} src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>
         </s.RoomBtnBox>
         <s.RoomList>
           { roomList.map((el, index) =>  
@@ -161,8 +168,9 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
           ) }
         </s.RoomList>
       </s.Container>
-      {isAddUserModal && <AddUserModal closeModal={() => setIsAddUserModal(false) } selectCreateRoom={selectCreateRoom}/> }
-      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} getRooms={() => getRooms()} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>}
+      {createRoomModal && <AddUserModal closeModal={() => setCreateRoomModal(false) } selectCreateRoom={selectCreateRoom}/> }
+      {inviteModal && <AddUserModal closeModal={() => setInviteModal(false) } roomId={menuRoomId} />} 
+      {isRoomContextMenu && <RoomContextMenu menuPosition={menuPosition} selectMenu={selectMenu} closeContextMenu={() => setIsRoomContextMenu(false)} getRooms={() => getRooms()} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} openInviteModal={openInviteModal}/>}
     </>
   );
 }

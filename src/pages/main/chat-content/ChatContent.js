@@ -146,9 +146,9 @@ const ChatContent = ({ selectedRoom, msgList, setMsgList }) => {
                       <div>
                         <Text fontSize={'17px'} fontWeight={'600'} margin={'0 0 0 10px'}>{selectedRoom.roomName}</Text>
                       </div>
-                      <div style={{margin:'10px'}} onClick={() => setIsAddUserModal(true)}>
+                      {/* <div style={{margin:'10px'}} onClick={() => setIsAddUserModal(true)}>
                         <img src="/assets/icon/add-room-icon.svg" width={'20px'} style={{cursor:'pointer'}}/>
-                      </div>
+                      </div> */}
                     </s.Title>
                     <s.MsgListBox ref={(ref) => msgRef.current = ref} >
                         {msgList?.map((el, index) => 

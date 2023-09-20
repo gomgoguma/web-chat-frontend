@@ -27,10 +27,6 @@ const AddUserModal = ({ closeModal, selectCreateRoom, roomId }) => {
     }
   }
 
-  useEffect(()=>{ 
-      getUsers({excludeOwnYn: 'Y'});
-  },[]);
-
   const handleContainerClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -60,12 +56,20 @@ const AddUserModal = ({ closeModal, selectCreateRoom, roomId }) => {
             selectCreateRoom(data);
           }
         }
+        else {
+          alert(resMsg);
+        }
       }
     }
   }
   
   const delayedSearch = useCallback(debounce((name) => {
-    getUsers({excludeOwnYn: 'Y', name});
+    let obj = {excludeOwnYn: 'Y'};
+    if(roomId) {
+      obj.roomId = roomId;
+      obj.excludeExitingUserYn = 'Y';
+    }
+    getUsers(obj);
   }, 200), []);
 
   const onChangeSearchName = (e) => {

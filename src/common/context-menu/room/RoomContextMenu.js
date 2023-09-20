@@ -3,7 +3,7 @@ import * as s from './RoomContextMenuSC';
 import Text from "../../text/Text";
 import RoomApi from "../../../api/RoomApi";
 
-const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, getRooms, selectedRoom, setSelectedRoom}) => {
+const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, getRooms, selectedRoom, setSelectedRoom, openInviteModal}) => {
     const contextMenuRef = useRef(null);
     const roomApi = RoomApi();
 
@@ -49,7 +49,10 @@ const RoomContextMenu = ({menuPosition, selectMenu, closeContextMenu, getRooms, 
                 <s.MenuBtn>
                     <Text fontSize={'14px'} fontWeight={'600'}> 채팅방 이름 설정 </Text> 
                 </s.MenuBtn>
-                <s.MenuBtn>
+                <s.MenuBtn onClick={() => {
+                    closeContextMenu();
+                    openInviteModal(selectMenu.id);
+                }}>
                     <Text fontSize={'14px'} fontWeight={'600'}> 대화 상대 초대 </Text> 
                 </s.MenuBtn>
                 <s.DeleteBtn onClick={() => deleteRoom()}> 
