@@ -76,7 +76,7 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
   }
 
   const handleOnMessage = async(msg) => {
-    if (!roomList.some(el => el.id === msg.roomId)) {
+    if(msg.type !== 'notification' && !roomList.some(el => el.id === msg.roomId)) {
       const res = await roomApi.getRoom({roomId: msg.roomId});
       if(res.status === 200) {
         let {resCd, resMsg, data} = res.data;
@@ -90,13 +90,14 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
     else {
       let newMsgRoom = roomList.find(el => el.id === msg.roomId);
       if(newMsgRoom) {
-        newMsgRoom.recentMsg = msg.msg;
-        newMsgRoom.recentMsgDtm = msg.dtm;
-        setRoomList([
-          newMsgRoom,
-          ...roomList.filter(el => el.id != msg.roomId)
-        ]);
-
+        if(msg.type !== 'notification' ) {
+          newMsgRoom.recentMsg = msg.msg;
+          newMsgRoom.recentMsgDtm = msg.dtm;
+          setRoomList([
+            newMsgRoom,
+            ...roomList.filter(el => el.id != msg.roomId)
+          ]);
+        }
         if(selectedRoom?.id === msg.roomId) {
           if(msgList) {
             setMsgList([...msgList, msg]);
@@ -104,7 +105,6 @@ const ChatRoom = ({setSelectedRoom, selectedRoom, msgList, setMsgList}) => {
           else {
             setMsgList([msg]);
           }
-          
         }
       }
     }
